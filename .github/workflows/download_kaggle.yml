@@ -1,0 +1,123 @@
+# name: Download Kaggle Outputs
+
+# on:
+#   workflow_dispatch:    
+
+# jobs:
+#   process-queue:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write        # Allows the bot to push files back to repo
+#       actions: write         # Required to read/write rolling artifact tracking pools
+
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Install Kaggle CLI
+#         run: |
+#           pip install kaggle
+#           sudo apt-get install git-lfs
+#           git lfs install
+
+#       - name: Download Latest Video and JSON
+#         env:
+#           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+#           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+#         run: |
+#           # 1. Completely delete the old folder to overwrite it
+#           rm -rf blastoffmedia_outputs
+#           mkdir -p blastoffmedia_outputs
+          
+#           # 2. Download everything from the latest notebook version into a temporary folder
+#           mkdir -p temp_download
+#           kaggle kernels output muhammadasjad2008/blastoffmedia-automation -p temp_download
+          
+#           # 3. Move only your specific files to the final folder
+#           cp temp_download/edited_source_only.mp4 blastoffmedia_outputs/
+#           cp temp_download/seo_metadata.json blastoffmedia_outputs/
+          
+#           # 4. Clean up the temporary folder
+#           rm -rf temp_download
+
+#       - name: Commit and Push Changes using Git LFS
+#         run: |
+#           git config --global user.name "github-actions[bot]"
+#           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+#           # Configure Git LFS to track video files
+#           git lfs track "*.mp4"
+#           git add .gitattributes
+          
+#           # Add the new folder, commit, and push
+#           git add blastoffmedia_outputs/
+#           git commit -m "Update: Latest Kaggle video and JSON automation output via LFS" || echo "No changes to commit"
+#           git push
+
+
+
+
+name: Download Kaggle Outputs
+
+on:
+  workflow_dispatch:    
+
+jobs:
+  process-queue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # Allows the bot to push files back to repo
+      actions: write         # Required to read/write rolling artifact tracking pools
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Kaggle CLI
+        run: |
+          pip install kaggle
+          sudo apt-get install git-lfs
+          git lfs install
+
+      - name: Download Latest Video and JSON
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          # 1. Completely delete the old folder to overwrite it
+          rm -rf blastoffmedia_outputs
+          mkdir -p blastoffmedia_outputs
+          
+          # 2. Download everything from the latest notebook version into a temporary folder
+          mkdir -p temp_download
+          kaggle kernels output muhammadasjad2008/blastoffmedia-automation -p temp_download
+          
+          # 3. Move only your specific files to the final folder
+          cp temp_download/edited_source_only.mp4 blastoffmedia_outputs/
+          cp temp_download/seo_metadata.json blastoffmedia_outputs/
+          
+          # 4. Clean up the temporary folder
+          rm -rf temp_download
+
+      - name: Commit and Push Changes using Git LFS
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 1. Configure Git LFS and add the attributes configuration rules first
+          git lfs track "blastoffmedia_outputs/*.mp4"
+          git add .gitattributes
+          
+          # 2. Explicitly add the JSON file on its own standard git tracking layer
+          git add blastoffmedia_outputs/seo_metadata.json
+          
+          # 3. Force add the media asset through the LFS filter layer 
+          git add blastoffmedia_outputs/edited_source_only.mp4
+          
+          # 4. Use global dot indexing to catch all untracked changes across both files simultaneously
+          git add .
+          
+          # Ensure git registers modifications across both content profiles and force push to the target tracking head
+          git commit -m "Update: Latest Kaggle video and JSON automation output via LFS" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref }}
