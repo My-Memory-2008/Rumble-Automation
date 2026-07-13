@@ -1,0 +1,42 @@
+{
+  "queue": [
+    {
+      "url": "https://www.instagram.com/news9live/reel/DXglR-IkiNs/",
+      "username": "news9live",
+      "notes": "Auto-added from reels_source.txt",
+      "added_at": "2026-07-11T16:42:14.349470+00:00"
+    }
+  ],
+  "processed": [
+    {
+      "url": "https://www.instagram.com/trywithmark/reel/DYZ0k-WMdyj/",
+      "username": "trywithmark",
+      "status": "in_progress",
+      "started_at": "2026-05-19T16:22:08.111381+00:00"
+    },
+    {
+      "url": "https://www.instagram.com/news9live/reel/DXglR-IkiNs/",
+      "username": "news9live",
+      "status": "in_progress",
+      "started_at": "2026-07-11T16:45:12.015951+00:00"
+    },
+    {
+      "url": "https://www.instagram.com/news9live/reel/DXglR-IkiNs/",
+      "username": "news9live",
+      "status": "in_progress",
+      "started_at": "2026-07-13T08:06:28.590745+00:00"
+    },
+    {
+      "url": "https://www.instagram.com/news9live/reel/DXglR-IkiNs/",
+      "username": "news9live",
+      "status": "in_progress",
+      "started_at": "2026-07-13T08:15:22.078550+00:00"
+    }
+  ],
+  "metadata": {
+    "total_queued": 1,
+    "total_processed": 0,
+    "last_run": "2026-07-11T16:42:14.349560+00:00",
+    "next_scheduled": null
+  }
+}
